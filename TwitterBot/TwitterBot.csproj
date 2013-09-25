@@ -99,6 +99,8 @@
     <Compile Include="MainController.cs" />
     <Compile Include="AboutController.cs" />
     <Compile Include="TweetsController.cs" />
+    <Compile Include="Tweet.cs" />
+    <Compile Include="TweetInfoController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
