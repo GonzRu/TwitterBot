@@ -28,6 +28,7 @@ namespace TwitterBot
 			
 			// If you have defined a root view controller, set it here:
 			// window.RootViewController = myViewController;
+			window.RootViewController = new MainController ();
 			
 			// make the window visible
 			window.MakeKeyAndVisible ();
