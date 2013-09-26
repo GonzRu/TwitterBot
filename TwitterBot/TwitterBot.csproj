@@ -83,12 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="Resources\Icons\" />
-    <Folder Include="Resources\Main\" />
-    <Folder Include="Resources\Mockups\" />
-    <Folder Include="Resources\Splash\" />
-    <Folder Include="Resources\TabBar\" />
-    <Folder Include="Resources\Tweets\" />
+    <Folder Include="Resources\Content\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -106,45 +101,41 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <BundleResource Include="Resources\Icons\Icon-Small.png" />
-    <BundleResource Include="Resources\Icons\Icon-Small%402x.png" />
-    <BundleResource Include="Resources\Icons\Icon.png" />
-    <BundleResource Include="Resources\Icons\Icon%402x.png" />
-    <BundleResource Include="Resources\Icons\iTunesArtwork%402x.png" />
-    <BundleResource Include="Resources\Main\avatar.png" />
-    <BundleResource Include="Resources\Main\avatar%402x.png" />
-    <BundleResource Include="Resources\Main\avatar_big.png" />
-    <BundleResource Include="Resources\Main\avatar_big%402x.png" />
-    <BundleResource Include="Resources\Main\mask_avatar.png" />
-    <BundleResource Include="Resources\Main\mask_avatar%402x.png" />
-    <BundleResource Include="Resources\Main\mask_avatar_mini.png" />
-    <BundleResource Include="Resources\Main\mask_avatar_mini%402x.png" />
-    <BundleResource Include="Resources\Main\table.png" />
-    <BundleResource Include="Resources\Main\table%402x.png" />
-    <BundleResource Include="Resources\Main\table_pressed.png" />
-    <BundleResource Include="Resources\Main\table_pressed%402x.png" />
-    <BundleResource Include="Resources\Mockups\Info.png" />
-    <BundleResource Include="Resources\Mockups\Main.png" />
-    <BundleResource Include="Resources\Mockups\Splash.png" />
-    <BundleResource Include="Resources\Mockups\Tweets.png" />
-    <BundleResource Include="Resources\Splash\Default-568h%402x.png" />
-    <BundleResource Include="Resources\Splash\splash.png" />
-    <BundleResource Include="Resources\Splash\splash%402x.png" />
-    <BundleResource Include="Resources\TabBar\icon_apple.png" />
-    <BundleResource Include="Resources\TabBar\icon_apple%402x.png" />
-    <BundleResource Include="Resources\TabBar\icon_dribbble.png" />
-    <BundleResource Include="Resources\TabBar\icon_dribbble%402x.png" />
-    <BundleResource Include="Resources\TabBar\icon_github.png" />
-    <BundleResource Include="Resources\TabBar\icon_github%402x.png" />
-    <BundleResource Include="Resources\TabBar\icon_twitter.png" />
-    <BundleResource Include="Resources\TabBar\icon_twitter%402x.png" />
-    <BundleResource Include="Resources\Tweets\bg.png" />
-    <BundleResource Include="Resources\Tweets\bg%402x.png" />
-    <BundleResource Include="Resources\Tweets\line.png" />
-    <BundleResource Include="Resources\Tweets\line%402x.png" />
-    <BundleResource Include="Resources\Инфо текст.rtf" />
+    <BundleResource Include="Resources\Content\Инфо текст.rtf" />
+    <BundleResource Include="Resources\Content\Icons\Icon.png" />
+    <BundleResource Include="Resources\Content\Icons\Icon%402x.png" />
+    <BundleResource Include="Resources\Content\Icons\Icon-Small.png" />
+    <BundleResource Include="Resources\Content\Icons\Icon-Small%402x.png" />
+    <BundleResource Include="Resources\Content\Icons\iTunesArtwork%402x.png" />
+    <BundleResource Include="Resources\Content\Main\avatar.png" />
+    <BundleResource Include="Resources\Content\Main\avatar%402x.png" />
+    <BundleResource Include="Resources\Content\Main\avatar_big.png" />
+    <BundleResource Include="Resources\Content\Main\avatar_big%402x.png" />
+    <BundleResource Include="Resources\Content\Main\mask_avatar.png" />
+    <BundleResource Include="Resources\Content\Main\mask_avatar%402x.png" />
+    <BundleResource Include="Resources\Content\Main\mask_avatar_mini.png" />
+    <BundleResource Include="Resources\Content\Main\mask_avatar_mini%402x.png" />
+    <BundleResource Include="Resources\Content\Main\table.png" />
+    <BundleResource Include="Resources\Content\Main\table%402x.png" />
+    <BundleResource Include="Resources\Content\Main\table_pressed.png" />
+    <BundleResource Include="Resources\Content\Main\table_pressed%402x.png" />
+    <BundleResource Include="Resources\Content\TabBar\icon_apple.png" />
+    <BundleResource Include="Resources\Content\TabBar\icon_apple%402x.png" />
+    <BundleResource Include="Resources\Content\TabBar\icon_dribbble.png" />
+    <BundleResource Include="Resources\Content\TabBar\icon_dribbble%402x.png" />
+    <BundleResource Include="Resources\Content\TabBar\icon_github.png" />
+    <BundleResource Include="Resources\Content\TabBar\icon_github%402x.png" />
+    <BundleResource Include="Resources\Content\TabBar\icon_twitter.png" />
+    <BundleResource Include="Resources\Content\TabBar\icon_twitter%402x.png" />
+    <BundleResource Include="Resources\Content\Tweets\bg.png" />
+    <BundleResource Include="Resources\Content\Tweets\bg%402x.png" />
+    <BundleResource Include="Resources\Content\Tweets\line.png" />
+    <BundleResource Include="Resources\Content\Tweets\line%402x.png" />
+    <BundleResource Include="Resources\Default.png" />
+    <BundleResource Include="Resources\Default%402x.png" />
+    <BundleResource Include="Resources\Default-568h%402x.png" />
   </ItemGroup>
   <ItemGroup>
-    <ITunesArtwork Include="Resources\Icons\iTunesArtwork.png" />
+    <ITunesArtwork Include="Resources\Content\Icons\iTunesArtwork.png" />
   </ItemGroup>
 </Project>

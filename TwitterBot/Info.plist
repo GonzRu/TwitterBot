@@ -14,5 +14,12 @@
 	</array>
 	<key>MinimumOSVersion</key>
 	<string>6.0</string>
+	<key>CFBundleIconFiles</key>
+	<array>
+		<string>Content/Icons/Icon-Small</string>
+		<string>Content/Icons/Icon-Small@2x</string>
+		<string>Content/Icons/Icon</string>
+		<string>Content/Icons/Icon@2x</string>
+	</array>
 </dict>
 </plist>
