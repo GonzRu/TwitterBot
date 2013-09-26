@@ -1,0 +1,85 @@
+using System;
+using MonoTouch.UIKit;
+using System.Collections.Generic;
+using MonoTouch.Foundation;
+
+namespace TwitterBot
+{
+	public class TweetsController : UITableViewController
+	{
+		private string _hashTag;
+
+		public TweetsController (string hashTag)
+		{
+			_hashTag = hashTag;
+		}
+
+		public override void ViewDidLoad ()
+		{
+			base.ViewDidLoad ();
+
+			TableView.Source = new TweetsTableViewSource (_hashTag, this);
+		}
+
+		public class TweetsTableViewSource : UITableViewSource
+		{
+			private const string TWEET_ID = "Tweet";
+			private const string MORE_TWEETS_ID = "MoreTweets";
+
+			private TweetsDownloader _tweetsDownloader;		
+			private List<Tweet> _tweetsList;
+			private TweetsController _root;
+
+			public TweetsTableViewSource(string hashTag, TweetsController root)
+			{
+				_tweetsDownloader = new TweetsDownloader(hashTag);
+				_tweetsList = _tweetsDownloader.GetNextNTweets(10);
+				_root = root;
+			}
+
+			public override int RowsInSection (UITableView tableview, int section)
+			{
+				return _tweetsList.Count + 1;
+			}
+
+			public override UITableViewCell GetCell (UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
+			{
+				int row = indexPath.Row;
+				UITableViewCell cell;
+
+				if (row == _tweetsList.Count) {
+					cell = new UITableViewCell (UITableViewCellStyle.Subtitle, MORE_TWEETS_ID);
+					cell.TextLabel.Text = "Показать ещё";
+				} else {
+					cell = tableView.DequeueReusableCell (TWEET_ID);
+
+					if (cell == null)
+						cell = new UITableViewCell (UITableViewCellStyle.Subtitle, TWEET_ID);
+
+					Tweet tweet = _tweetsList [row];
+
+					cell.TextLabel.Text = tweet.UserName;
+					cell.DetailTextLabel.Text = tweet.TweetText;
+					cell.ImageView.Image = tweet.UserAvatar;
+				}
+
+				return cell;
+			}
+
+			public override void RowSelected (UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
+			{
+				int row = indexPath.Row;
+
+				if (row != _tweetsList.Count)
+					_root.TabBarController.NavigationController.PushViewController (new TweetInfoController (_tweetsList [indexPath.Row]), true);
+				else {
+					_tweetsList.AddRange (_tweetsDownloader.GetNextNTweets (10));
+					tableView.ReloadData ();
+				}
+			}
+
+
+		}
+	}
+}
+

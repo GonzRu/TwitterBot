@@ -54,6 +54,8 @@ namespace TwitterBot
 			View.AddSubview (_aboutLabel);
 			View.AddSubview (_btnCall);
 			View.AddSubview (_btnEmail);
+
+			//this.NavigationController.PushViewController (new UIViewController (), true);
 		}
 
 
