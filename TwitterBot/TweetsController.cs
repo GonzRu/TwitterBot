@@ -21,6 +21,13 @@ namespace TwitterBot
 			TableView.Source = new TweetsTableViewSource (_hashTag, this);
 		}
 
+		public override void ViewDidAppear (bool animated)
+		{
+			base.ViewDidAppear (animated);
+
+			TabBarController.Title = _hashTag;
+		}
+
 		public class TweetsTableViewSource : UITableViewSource
 		{
 			private const string TWEET_ID = "Tweet";

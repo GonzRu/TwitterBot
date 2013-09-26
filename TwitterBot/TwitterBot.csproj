@@ -102,6 +102,7 @@
     <Compile Include="Tweet.cs" />
     <Compile Include="TweetInfoController.cs" />
     <Compile Include="TweetsDownloader.cs" />
+    <Compile Include="TwitterTabBarController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
