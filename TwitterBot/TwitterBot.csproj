@@ -101,6 +101,7 @@
     <Compile Include="TweetsController.cs" />
     <Compile Include="Tweet.cs" />
     <Compile Include="TweetInfoController.cs" />
+    <Compile Include="TweetsDownloader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
