@@ -84,6 +84,8 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Resources\Content\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -91,13 +93,13 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="MainController.cs" />
-    <Compile Include="AboutController.cs" />
-    <Compile Include="TweetsController.cs" />
-    <Compile Include="Tweet.cs" />
-    <Compile Include="TweetInfoController.cs" />
-    <Compile Include="TweetsDownloader.cs" />
-    <Compile Include="TwitterTabBarController.cs" />
+    <Compile Include="Controllers\AboutController.cs" />
+    <Compile Include="Controllers\MainController.cs" />
+    <Compile Include="Controllers\TweetInfoController.cs" />
+    <Compile Include="Controllers\TweetsController.cs" />
+    <Compile Include="Controllers\TwitterTabBarController.cs" />
+    <Compile Include="Models\Tweet.cs" />
+    <Compile Include="Models\TweetsDownloader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

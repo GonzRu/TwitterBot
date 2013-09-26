@@ -13,13 +13,13 @@ namespace TwitterBot
 		public TwitterTabBarController ()
 		{
 			_tab1 = new TweetsController (HASH_TAG_COLLECTION[0]);
-			_tab1.TabBarItem = new UITabBarItem (HASH_TAG_COLLECTION[0], UIImage.FromFile ("TabBar/icon_twitter.png"), 0);
+			_tab1.TabBarItem = new UITabBarItem (HASH_TAG_COLLECTION[0], UIImage.FromFile ("Content/TabBar/icon_twitter.png"), 0);
 			_tab2 = new TweetsController (HASH_TAG_COLLECTION[1]);
-			_tab2.TabBarItem = new UITabBarItem (HASH_TAG_COLLECTION[1], UIImage.FromFile ("TabBar/icon_dribbble.png"), 0);
+			_tab2.TabBarItem = new UITabBarItem (HASH_TAG_COLLECTION[1], UIImage.FromFile ("Content/TabBar/icon_dribbble.png"), 0);
 			_tab3 = new TweetsController (HASH_TAG_COLLECTION[2]);
-			_tab3.TabBarItem = new UITabBarItem (HASH_TAG_COLLECTION[2], UIImage.FromFile ("TabBar/icon_apple.png"), 0);
+			_tab3.TabBarItem = new UITabBarItem (HASH_TAG_COLLECTION[2], UIImage.FromFile ("Content/TabBar/icon_apple.png"), 0);
 			_tab4 = new TweetsController (HASH_TAG_COLLECTION[3]);
-			_tab4.TabBarItem = new UITabBarItem (HASH_TAG_COLLECTION[3], UIImage.FromFile ("TabBar/icon_github.png"), 0);
+			_tab4.TabBarItem = new UITabBarItem (HASH_TAG_COLLECTION[3], UIImage.FromFile ("Content/TabBar/icon_github.png"), 0);
 
 			this.ViewControllers = new UIViewController[] { _tab1, _tab2, _tab3, _tab4 };
 
