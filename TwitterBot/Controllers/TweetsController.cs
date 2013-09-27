@@ -33,15 +33,19 @@ namespace TwitterBot
 			private const string TWEET_ID = "Tweet";
 			private const string MORE_TWEETS_ID = "MoreTweets";
 
+			private TweetsController _root;
+			private TweetInfoController _tweetInfo;
+
 			private TweetsDownloader _tweetsDownloader;		
 			private List<Tweet> _tweetsList;
-			private TweetsController _root;
 
 			public TweetsTableViewSource(string hashTag, TweetsController root)
 			{
 				_tweetsDownloader = new TweetsDownloader(hashTag);
-				_tweetsList = _tweetsDownloader.GetNextNTweets(10);
+				_tweetInfo = new TweetInfoController();
 				_root = root;
+
+				_tweetsList = _tweetsDownloader.GetNextNTweets(10);
 			}
 
 			public override int RowsInSection (UITableView tableview, int section)
@@ -77,8 +81,10 @@ namespace TwitterBot
 			{
 				int row = indexPath.Row;
 
-				if (row != _tweetsList.Count)
-					_root.TabBarController.NavigationController.PushViewController (new TweetInfoController (_tweetsList [indexPath.Row]), true);
+				if (row != _tweetsList.Count) {
+					_tweetInfo.ShowNewTweetInfo (_tweetsList [indexPath.Row]);
+					_root.TabBarController.NavigationController.PushViewController (_tweetInfo, true);
+				}
 				else {
 					_tweetsList.AddRange (_tweetsDownloader.GetNextNTweets (10));
 					tableView.ReloadData ();
