@@ -15,6 +15,8 @@ namespace TwitterBot
 		private Twitter5Service _twitter;
 		private Account _acc;
 
+		private string _maxId = "";
+
 		public TweetsDownloader (string hastag)
 		{
 			_hashtag = hastag;
@@ -52,7 +54,10 @@ namespace TwitterBot
 		{
 			string hastTag = _hashtag.Substring (1);
 
-			return "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=" + hastTag + "&count=" + countOfTweets.ToString ();
+			if (String.IsNullOrEmpty (_maxId))
+				return "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=" + hastTag + "&count=" + countOfTweets.ToString ();
+			else
+				return "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=" + hastTag + "&count=" + countOfTweets.ToString () + "&max_id=" + _maxId;
 		}
 
 		private List<Tweet> ParseJsonToTweetsList(string jsonStr)
@@ -69,7 +74,11 @@ namespace TwitterBot
 				Console.WriteLine (t.PostTweetTime);
 
 				list.Add (t);
+
+				_maxId = (string)token.SelectToken ("id_str");
 			}
+
+			_maxId = (Int64.Parse(_maxId) - 1).ToString();
 
 			return list;
 		}
