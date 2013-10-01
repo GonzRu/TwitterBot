@@ -71,14 +71,21 @@ namespace TwitterBot
 			foreach (var token in o) {
 				Tweet t = new Tweet ((string)token.SelectToken ("name"), (string)token.SelectToken ("text"), null);
 				t.PostTweetTime = DateTime.ParseExact ((string)token.SelectToken ("created_at"), "ddd MMM dd HH:mm:ss zzz yyyy", System.Globalization.CultureInfo.InvariantCulture);
-				Console.WriteLine (t.PostTweetTime);
+				t.UserAvatarUrl = new Uri ((string)token.SelectToken ("user").SelectToken("profile_image_url"));
 
 				list.Add (t);
 
 				_maxId = (string)token.SelectToken ("id_str");
 			}
 
-			_maxId = (Int64.Parse(_maxId) - 1).ToString();
+			try
+			{
+				if (!String.IsNullOrEmpty(_maxId))
+					_maxId = (Int64.Parse(_maxId) - 1).ToString();
+			}
+			catch (Exception e) {
+				Console.WriteLine (e.Message + " max_id = " + _maxId);
+			}
 
 			return list;
 		}
