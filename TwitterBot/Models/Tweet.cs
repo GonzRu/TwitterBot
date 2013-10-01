@@ -19,5 +19,7 @@ namespace TwitterBot
 		public UIImage UserAvatar { get; set; }
 
 		public DateTime PostTweetTime { get; set; }
+
+		public Uri UserAvatarUrl { get; set; }
 	}
 }
