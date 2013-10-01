@@ -1,9 +1,10 @@
 using System;
 using MonoTouch.UIKit;
+using MonoTouch.Dialog.Utilities;
 
 namespace TwitterBot
 {
-	public class TweetTableViewCell : UITableViewCell
+	public class TweetTableViewCell : UITableViewCell, IImageUpdated
 	{
 		private UILabel _UserNameLabel;
 		private UILabel _UserTweetTextLabel;
@@ -21,8 +22,9 @@ namespace TwitterBot
 			_UserNameLabel.Text = tweet.UserName;
 			_UserTweetTextLabel.Text = tweet.TweetText;
 			_UserTweetPostTimeLabel.Text = (DateTime.Now - tweet.PostTweetTime).Days.ToString () + "ч";
-			_UserAvatarView.Image = UIImage.FromFile ("Content/Main/avatar.png");
-
+			_UserAvatarView.Image = ImageLoader.DefaultRequestImage (tweet.UserAvatarUrl, this);
+			if (_UserAvatarView.Image == null)
+				_UserAvatarView.Image = UIImage.FromFile ("Content/Main/avatar.png");
 
 			_UserNameLabel.Font = UIFont.FromName ("HelveticaNeue-Bold", 17f);
 			_UserTweetPostTimeLabel.Font = UIFont.FromName ("HelveticaNeue", 11f);
@@ -65,6 +67,11 @@ namespace TwitterBot
 			                                                               b.Top,
 			                                                               postDayWidth,
 			                                                               b.Height / 2);
+		}
+
+		public void UpdatedImage (Uri uri)
+		{
+			_UserAvatarView.Image = ImageLoader.DefaultRequestImage (uri, null);
 		}
 	}
 }
