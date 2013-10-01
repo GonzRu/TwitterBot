@@ -34,19 +34,13 @@ public class TweetsTableViewSource : UITableViewSource
 		UITableViewCell cell;
 
 		if (row == _tweetsList.Count) {
-			cell = new UITableViewCell (UITableViewCellStyle.Subtitle, MORE_TWEETS_ID);
+			cell = new UITableViewCell ();
 			cell.TextLabel.Text = "Показать ещё";
 		} else {
 			cell = tableView.DequeueReusableCell (TWEET_ID);
 
 			if (cell == null)
-				cell = new UITableViewCell (UITableViewCellStyle.Subtitle, TWEET_ID);
-
-			Tweet tweet = _tweetsList [row];
-
-			cell.TextLabel.Text = tweet.UserName;
-			cell.DetailTextLabel.Text = tweet.TweetText;
-			cell.ImageView.Image = tweet.UserAvatar;
+				cell = new TweetTableViewCell (_tweetsList [row], TWEET_ID);
 		}
 
 		return cell;
