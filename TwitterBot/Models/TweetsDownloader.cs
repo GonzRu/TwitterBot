@@ -69,7 +69,7 @@ namespace TwitterBot
 			JArray o = JArray.Parse (jsonStr);
 
 			foreach (var token in o) {
-				Tweet t = new Tweet ((string)token.SelectToken ("name"), (string)token.SelectToken ("text"), null);
+				Tweet t = new Tweet ((string)token.SelectToken ("user").SelectToken ("name"), (string)token.SelectToken ("text"), null);
 				t.PostTweetTime = DateTime.ParseExact ((string)token.SelectToken ("created_at"), "ddd MMM dd HH:mm:ss zzz yyyy", System.Globalization.CultureInfo.InvariantCulture);
 				t.UserAvatarUrl = new Uri ((string)token.SelectToken ("user").SelectToken("profile_image_url"));
 

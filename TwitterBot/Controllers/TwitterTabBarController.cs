@@ -32,11 +32,14 @@ namespace TwitterBot
 
 			NavigationItem.RightBarButtonItem = new UIBarButtonItem (
 				"Инфо", 
-				UIBarButtonItemStyle.Done, 
-				new EventHandler ((sender,e) => {
-				this.NavigationController.PushViewController (_aboutController, true);
-			}
-			));
+				UIBarButtonItemStyle.Done,
+				AboutCompanyButtonPushed
+			);
+		}
+
+		private void AboutCompanyButtonPushed (Object sender, EventArgs e)
+		{
+			this.NavigationController.PushViewController (_aboutController, true);
 		}
 	}
 }

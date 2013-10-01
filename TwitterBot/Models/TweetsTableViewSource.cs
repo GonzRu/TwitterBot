@@ -6,7 +6,7 @@ using TwitterBot;
 public class TweetsTableViewSource : UITableViewSource
 {
 	private const string TWEET_ID = "Tweet";
-	private const string MORE_TWEETS_ID = "MoreTweets";
+	private const int COUNT_OF_TWEETS_TO_DOWNLOAD = 10;
 
 	private TweetsController _root;
 	private TweetInfoController _tweetInfo;
@@ -20,7 +20,7 @@ public class TweetsTableViewSource : UITableViewSource
 		_tweetInfo = new TweetInfoController();
 		_root = root;
 
-		_tweetsList = _tweetsDownloader.GetNextNTweets(10);
+		_tweetsList = _tweetsDownloader.GetNextNTweets(COUNT_OF_TWEETS_TO_DOWNLOAD);
 	}
 
 	public override int RowsInSection (UITableView tableview, int section)
@@ -55,7 +55,7 @@ public class TweetsTableViewSource : UITableViewSource
 			_root.TabBarController.NavigationController.PushViewController (_tweetInfo, true);
 		}
 		else {
-			_tweetsList.AddRange (_tweetsDownloader.GetNextNTweets (10));
+			_tweetsList.AddRange (_tweetsDownloader.GetNextNTweets (COUNT_OF_TWEETS_TO_DOWNLOAD));
 			tableView.ReloadData ();
 		}
 	}
