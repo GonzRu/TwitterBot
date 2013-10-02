@@ -6,25 +6,24 @@ using TwitterBot;
 public class TweetsTableViewSource : UITableViewSource
 {
 	private const string TWEET_ID = "Tweet";
-	private const int COUNT_OF_TWEETS_TO_DOWNLOAD = 10;
-
-	private TweetsController _root;
-	private TweetInfoController _tweetInfo;
+	private const int COUNT_OF_TWEETS_TO_DOWNLOAD = 6;
 
 	private TweetsDownloader _tweetsDownloader;		
 	private List<Tweet> _tweetsList;
-
+	
+	public event Action TweetDownloadStarted;
+	public event Action TweetDownloadEnded;	
+	public event Action<Tweet> TableCellSelected;
+	
 	public TweetsTableViewSource(string hashTag, TweetsController root)
 	{
 		_tweetsDownloader = new TweetsDownloader(hashTag);
-		_tweetInfo = new TweetInfoController();
-		_root = root;
-
-		_tweetsList = _tweetsDownloader.GetNextNTweets(COUNT_OF_TWEETS_TO_DOWNLOAD);
 	}
 
 	public override int RowsInSection (UITableView tableview, int section)
 	{
+		if (_tweetsList == null)
+			return 0;
 		return _tweetsList.Count + 1;
 	}
 
@@ -50,15 +49,37 @@ public class TweetsTableViewSource : UITableViewSource
 	{
 		int row = indexPath.Row;
 
-		if (row != _tweetsList.Count) {
-			_tweetInfo.ShowNewTweetInfo (_tweetsList [indexPath.Row]);
-			_root.TabBarController.NavigationController.PushViewController (_tweetInfo, true);
-		}
-		else {
-			_tweetsList.AddRange (_tweetsDownloader.GetNextNTweets (COUNT_OF_TWEETS_TO_DOWNLOAD));
-			tableView.ReloadData ();
-		}
+		if (row != _tweetsList.Count)
+			OnTableCellSelected (_tweetsList [indexPath.Row]);
+		else
+			LoadData ();
 	}
 
+	public async void LoadData ()
+	{
+		OnTweetDownloadStarted ();
+		var l = await _tweetsDownloader.GetNextNTweetsAsync (COUNT_OF_TWEETS_TO_DOWNLOAD);
+		if (_tweetsList == null)
+			_tweetsList = l;
+		else
+			_tweetsList.AddRange (l);
+		OnTweetDownloadEnded ();
+	}
 
+	protected virtual void OnTweetDownloadStarted ()
+	{
+		if (TweetDownloadStarted != null)
+			TweetDownloadStarted ();
+	}
+
+	protected virtual void OnTweetDownloadEnded ()
+	{
+		if (TweetDownloadEnded != null)
+			TweetDownloadEnded ();
+	}
+	protected virtual void OnTableCellSelected (Tweet t)
+	{
+		if (TableCellSelected != null)
+			TableCellSelected (t);
+	}
 }
