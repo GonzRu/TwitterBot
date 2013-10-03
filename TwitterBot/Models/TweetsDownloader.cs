@@ -65,13 +65,22 @@ namespace TwitterBot
 			List<Tweet> list = new List<Tweet> ();
 
 			Console.WriteLine (jsonStr);
-			System.Threading.Thread.Sleep (4000);
 			JArray o = JArray.Parse (jsonStr);
 
 			foreach (var token in o) {
-				Tweet t = new Tweet ((string)token.SelectToken ("user").SelectToken ("name"), (string)token.SelectToken ("text"), null);
-				t.PostTweetTime = DateTime.ParseExact ((string)token.SelectToken ("created_at"), "ddd MMM dd HH:mm:ss zzz yyyy", System.Globalization.CultureInfo.InvariantCulture);
-				t.UserAvatarUrl = new Uri ((string)token.SelectToken ("user").SelectToken("profile_image_url"));
+				var retweetedToken = token.SelectToken ("retweeted_status");
+				Tweet t = new Tweet ();
+				if (retweetedToken == null) {
+					t.UserName = (string)token.SelectToken ("user").SelectToken ("name");
+					t.TweetText = (string)token.SelectToken ("text");
+					t.PostTweetTime = DateTime.ParseExact ((string)token.SelectToken ("created_at"), "ddd MMM dd HH:mm:ss zzz yyyy", System.Globalization.CultureInfo.InvariantCulture);
+					t.UserAvatarUrl = new Uri ((string)token.SelectToken ("user").SelectToken ("profile_image_url"));
+				} else {
+					t.UserName = (string)retweetedToken.SelectToken ("user").SelectToken ("name");
+					t.TweetText = (string)retweetedToken.SelectToken ("text");
+					t.PostTweetTime = DateTime.ParseExact ((string)retweetedToken.SelectToken ("created_at"), "ddd MMM dd HH:mm:ss zzz yyyy", System.Globalization.CultureInfo.InvariantCulture);
+					t.UserAvatarUrl = new Uri ((string)retweetedToken.SelectToken ("user").SelectToken ("profile_image_url"));
+				}
 
 				list.Add (t);
 

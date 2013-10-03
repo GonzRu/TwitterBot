@@ -5,13 +5,6 @@ namespace TwitterBot
 {
 	public class Tweet
 	{
-		public Tweet (string userName, string tweetText, UIImage userAvatar)
-		{
-			UserName = userName;
-			TweetText = tweetText;
-			UserAvatar = userAvatar;
-		}
-
 		public string UserName { get; set; }
 
 		public string TweetText { get; set; }
@@ -21,5 +14,7 @@ namespace TwitterBot
 		public DateTime PostTweetTime { get; set; }
 
 		public Uri UserAvatarUrl { get; set; }
+
+		public string ShortUrl { get; set; }
 	}
 }
