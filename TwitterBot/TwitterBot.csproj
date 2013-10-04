@@ -114,6 +114,7 @@
     <Compile Include="Models\TweetsTableViewSource.cs" />
     <Compile Include="Views\TweetTableViewCell.cs" />
     <Compile Include="Views\LoadingAlertView.cs" />
+    <Compile Include="Views\MoreTweetsTableViewCell.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

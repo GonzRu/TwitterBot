@@ -6,7 +6,7 @@ using TwitterBot;
 public class TweetsTableViewSource : UITableViewSource
 {
 	private const string TWEET_ID = "Tweet";
-	private const int COUNT_OF_TWEETS_TO_DOWNLOAD = 6;
+	private const int COUNT_OF_TWEETS_TO_DOWNLOAD = 7;
 
 	private TweetsDownloader _tweetsDownloader;		
 	private List<Tweet> _tweetsList;
@@ -33,8 +33,7 @@ public class TweetsTableViewSource : UITableViewSource
 		UITableViewCell cell;
 
 		if (row == _tweetsList.Count) {
-			cell = new UITableViewCell ();
-			cell.TextLabel.Text = "Показать ещё";
+			cell = new MoreTweetsTableViewCell ();
 		} else {
 			cell = tableView.DequeueReusableCell (TWEET_ID);
 
@@ -50,9 +49,17 @@ public class TweetsTableViewSource : UITableViewSource
 		int row = indexPath.Row;
 
 		if (row != _tweetsList.Count)
-			OnTableCellSelected (_tweetsList [indexPath.Row]);
+			OnTableCellSelected (_tweetsList [row]);
 		else
 			LoadData ();
+	}
+
+	public override float GetHeightForRow (UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
+	{
+		if (indexPath.Row != _tweetsList.Count)
+			return 44;
+		else
+			return 70;
 	}
 
 	public async void LoadData ()
