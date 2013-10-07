@@ -10,13 +10,13 @@ public class TweetsTableViewSource : UITableViewSource
 	private const int COUNT_OF_TWEETS_TO_DOWNLOAD = 7;
 
 	private TweetsDownloader _tweetsDownloader;		
-	private List<Tweet> _tweetsList;
+	public List<Tweet> TweetsList { get; set; }
 	
 	public event Action TweetDownloadStarted;
 	public event Action TweetDownloadEnded;	
 	public event Action NetworkConnectionError;
 	public event Action JsonParseError;
-	public event Action<Tweet> TableCellSelected;
+	public event Action<int> TableCellSelected;
 	
 	public TweetsTableViewSource(string hashTag, TweetsController root)
 	{
@@ -25,9 +25,9 @@ public class TweetsTableViewSource : UITableViewSource
 
 	public override int RowsInSection (UITableView tableview, int section)
 	{
-		if (_tweetsList == null)
+		if (TweetsList == null)
 			return 0;
-		return _tweetsList.Count + 1;
+		return TweetsList.Count + 1;
 	}
 
 	public override UITableViewCell GetCell (UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
@@ -35,7 +35,7 @@ public class TweetsTableViewSource : UITableViewSource
 		int row = indexPath.Row;
 		UITableViewCell cell;
 
-		if (row == _tweetsList.Count) {
+		if (row == TweetsList.Count) {
 			cell = tableView.DequeueReusableCell (MORE_TWEETS_ID);
 
 			if (cell == null)
@@ -46,7 +46,7 @@ public class TweetsTableViewSource : UITableViewSource
 			if (cell == null)
 				cell = new TweetTableViewCell (TWEET_ID);
 
-			(cell as TweetTableViewCell).UpdateCell (_tweetsList [row]);
+			(cell as TweetTableViewCell).UpdateCell (TweetsList [row]);
 		}
 
 		return cell;
@@ -54,17 +54,12 @@ public class TweetsTableViewSource : UITableViewSource
 
 	public override void RowSelected (UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
 	{
-		int row = indexPath.Row;
-
-		if (row != _tweetsList.Count)
-			OnTableCellSelected (_tweetsList [row]);
-		else
-			LoadData ();
+		OnTableCellSelected (indexPath.Row);
 	}
 
 	public override float GetHeightForRow (UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
 	{
-		if (indexPath.Row != _tweetsList.Count)
+		if (indexPath.Row != TweetsList.Count)
 			return 44;
 		else
 			return 70;
@@ -73,19 +68,24 @@ public class TweetsTableViewSource : UITableViewSource
 	public async void LoadData ()
 	{
 		OnTweetDownloadStarted ();
-		if (_tweetsList == null)
-			_tweetsList = new List<Tweet> ();
 
 		try
 		{
 			var l = await _tweetsDownloader.GetNextNTweetsAsync (COUNT_OF_TWEETS_TO_DOWNLOAD);
-			_tweetsList.AddRange (l);
+			if (TweetsList == null)
+				TweetsList = l;
+			else
+				TweetsList.AddRange (l);
 		}
-		catch (Newtonsoft.Json.JsonReaderException e) {
+		catch (Newtonsoft.Json.JsonReaderException) {
 			OnJsonParseError ();
+			if (TweetsList == null)
+				TweetsList = new List<Tweet> ();
 		}
-		catch (Exception e) {
+		catch (Exception) {
 			OnNetworkConnectionError ();
+			if (TweetsList == null)
+				TweetsList = new List<Tweet> ();
 		}
 
 		OnTweetDownloadEnded ();
@@ -115,9 +115,9 @@ public class TweetsTableViewSource : UITableViewSource
 			JsonParseError ();
 	}
 
-	protected virtual void OnTableCellSelected (Tweet t)
+	protected virtual void OnTableCellSelected (int row)
 	{
 		if (TableCellSelected != null)
-			TableCellSelected (t);
+			TableCellSelected (row);
 	}
 }

@@ -64,10 +64,15 @@ namespace TwitterBot
 			new UIAlertView ("Ошибка", "Ошибка входящих данных", null, "ok", null).Show ();
 		}
 
-		private void TableCellSelected (Tweet t)
+		private void TableCellSelected (int row)
 		{
-			_tweetInfoController.ShowNewTweetInfo (t);
-			this.TabBarController.NavigationController.PushViewController (_tweetInfoController,true);
+			var source = TableView.Source as TweetsTableViewSource;
+
+			if (row != source.TweetsList.Count) {
+				_tweetInfoController.ShowNewTweetInfo (source.TweetsList [row]);
+				this.TabBarController.NavigationController.PushViewController (_tweetInfoController, true);
+			} else
+				source.LoadData ();
 		}
 	}
 }
