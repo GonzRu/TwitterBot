@@ -6,39 +6,23 @@ namespace TwitterBot
 {
 	public class TweetTableViewCell : UITableViewCell, IImageUpdated
 	{
-		private UILabel _UserNameLabel;
-		private UILabel _UserTweetTextLabel;
-		private UILabel _UserTweetPostTimeLabel;
-		private UIImageView _UserAvatarView;
+		private UILabel _userNameLabel;
+		private UILabel _userTweetTextLabel;
+		private UILabel _userTweetPostTimeLabel;
+		private UIImageView _userAvatarView;
 
-		public TweetTableViewCell (Tweet tweet, string reuseIdentifier)
+		public TweetTableViewCell (string reuseIdentifier)
 			: base(UITableViewCellStyle.Subtitle, reuseIdentifier)
 		{
-			_UserNameLabel = new UILabel ();
-			_UserTweetTextLabel = new UILabel ();
-			_UserTweetPostTimeLabel = new UILabel ();
-			_UserAvatarView = new UIImageView ();
+			_userNameLabel = new UILabel ();
+			_userTweetTextLabel = new UILabel ();
+			_userTweetPostTimeLabel = new UILabel ();
+			_userAvatarView = new UIImageView ();
 
-			_UserNameLabel.Text = tweet.UserName;
-			_UserTweetTextLabel.Text = tweet.TweetText;
-			_UserTweetPostTimeLabel.Text = (DateTime.Now - tweet.PostTweetTime).Days.ToString () + "ч";
-			_UserAvatarView.Image = ImageLoader.DefaultRequestImage (tweet.UserAvatarUrl, this);
-			if (_UserAvatarView.Image == null)
-				_UserAvatarView.Image = UIImage.FromFile ("Content/Main/avatar.png");
-
-			_UserNameLabel.Font = UIFont.FromName ("HelveticaNeue-Bold", 17f);
-			_UserTweetPostTimeLabel.Font = UIFont.FromName ("HelveticaNeue", 11f);
-			_UserTweetTextLabel.Font = UIFont.FromName ("HelveticaNeue", 13f);
-
-
-			_UserNameLabel.TextColor = UIColor.Black;
-			_UserTweetTextLabel.TextColor = UIColor.FromRGB (89, 89, 89);
-			_UserTweetPostTimeLabel.TextColor = UIColor.FromRGB (89, 89, 89);
-
-			this.ContentView.AddSubview (_UserNameLabel);
-			this.ContentView.AddSubview (_UserTweetTextLabel);
-			this.ContentView.AddSubview (_UserTweetPostTimeLabel);
-			this.ContentView.AddSubview (_UserAvatarView);
+			this.ContentView.AddSubview (_userNameLabel);
+			this.ContentView.AddSubview (_userTweetTextLabel);
+			this.ContentView.AddSubview (_userTweetPostTimeLabel);
+			this.ContentView.AddSubview (_userAvatarView);
 		}
 
 		public override void LayoutSubviews ()
@@ -52,26 +36,57 @@ namespace TwitterBot
 			float rightPadding = 10.0f;
 			float leftPadding = 10.0f;
 			float totalPadding = leftPadding + rightPadding;
-			float postDayWidth = 20.0f;
+			float postDayWidth = 30.0f;
 
-			_UserAvatarView.Frame = new System.Drawing.RectangleF (b.Left, b.Top, iconWidth, iconHeight);
-			_UserNameLabel.Frame = new System.Drawing.RectangleF (b.Left + iconWidth + leftPadding, 
+			_userNameLabel.Font = UIFont.FromName ("HelveticaNeue-Bold", 17f);
+			_userTweetPostTimeLabel.Font = UIFont.FromName ("HelveticaNeue", 11f);
+			_userTweetTextLabel.Font = UIFont.FromName ("HelveticaNeue", 13f);
+
+			_userTweetPostTimeLabel.TextAlignment = UITextAlignment.Right;
+
+			_userNameLabel.TextColor = UIColor.Black;
+			_userTweetTextLabel.TextColor = UIColor.FromRGB (89, 89, 89);
+			_userTweetPostTimeLabel.TextColor = UIColor.FromRGB (89, 89, 89);
+
+			_userAvatarView.Frame = new System.Drawing.RectangleF (b.Left,
+			                                                       b.Top,
+			                                                       iconWidth,
+			                                                       iconHeight);
+			_userNameLabel.Frame = new System.Drawing.RectangleF (b.Left + iconWidth + leftPadding, 
 			                                                      b.Top, 
 			                                                      b.Width - iconWidth - totalPadding - postDayWidth,
 			                                                      b.Height / 2);
-			_UserTweetTextLabel.Frame = new System.Drawing.RectangleF (b.Left + iconWidth + leftPadding,
+			_userTweetTextLabel.Frame = new System.Drawing.RectangleF (b.Left + iconWidth + leftPadding,
 			                                                               b.Height / 2,
 			                                                               b.Width - iconWidth - totalPadding,
 			                                                               b.Height / 2);
-			_UserTweetPostTimeLabel.Frame = new System.Drawing.RectangleF (b.Width - postDayWidth - rightPadding,
+			_userTweetPostTimeLabel.Frame = new System.Drawing.RectangleF (b.Width - postDayWidth - rightPadding,
 			                                                               b.Top,
 			                                                               postDayWidth,
 			                                                               b.Height / 2);
 		}
 
+		public void UpdateCell (Tweet tweet)
+		{
+			_userNameLabel.Text = tweet.UserName;
+			_userTweetTextLabel.Text = tweet.TweetText;
+
+			var d = DateTime.Now - tweet.PostTweetTime;
+			if (d.Days != 0)
+				_userTweetPostTimeLabel.Text = d.Days.ToString () + " д";
+			else if (d.Hours != 0)
+				_userTweetPostTimeLabel.Text = d.Hours.ToString () + " ч";
+			else
+				_userTweetPostTimeLabel.Text = d.Minutes.ToString () + " м";
+			_userAvatarView.Image = ImageLoader.DefaultRequestImage (tweet.UserAvatarUrl, this);
+
+			if (_userAvatarView.Image == null)
+				_userAvatarView.Image = UIImage.FromFile ("Content/Main/avatar.png");
+		}
+
 		public void UpdatedImage (Uri uri)
 		{
-			_UserAvatarView.Image = ImageLoader.DefaultRequestImage (uri, null);
+			_userAvatarView.Image = ImageLoader.DefaultRequestImage (uri, null);
 		}
 	}
 }

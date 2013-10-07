@@ -6,6 +6,7 @@ using TwitterBot;
 public class TweetsTableViewSource : UITableViewSource
 {
 	private const string TWEET_ID = "Tweet";
+	private const string MORE_TWEETS_ID = "More Tweets";
 	private const int COUNT_OF_TWEETS_TO_DOWNLOAD = 7;
 
 	private TweetsDownloader _tweetsDownloader;		
@@ -33,12 +34,17 @@ public class TweetsTableViewSource : UITableViewSource
 		UITableViewCell cell;
 
 		if (row == _tweetsList.Count) {
-			cell = new MoreTweetsTableViewCell ();
+			cell = tableView.DequeueReusableCell (MORE_TWEETS_ID);
+
+			if (cell == null)
+				cell = new MoreTweetsTableViewCell (MORE_TWEETS_ID);
 		} else {
 			cell = tableView.DequeueReusableCell (TWEET_ID);
 
 			if (cell == null)
-				cell = new TweetTableViewCell (_tweetsList [row], TWEET_ID);
+				cell = new TweetTableViewCell (TWEET_ID);
+
+			(cell as TweetTableViewCell).UpdateCell (_tweetsList [row]);
 		}
 
 		return cell;

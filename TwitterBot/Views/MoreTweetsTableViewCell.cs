@@ -13,7 +13,7 @@ namespace TwitterBot
 		float _topPadding = 12f;
 		private bool _selected = false;
 
-		public MoreTweetsTableViewCell ()
+		public MoreTweetsTableViewCell (string id) : base (UITableViewCellStyle.Default, id)
 		{
 			SelectionStyle = UITableViewCellSelectionStyle.None;
 
@@ -23,7 +23,7 @@ namespace TwitterBot
 			u.BackgroundColor = UIColor.Clear;
 		}
 
-		public override void Draw (System.Drawing.RectangleF rect)
+		public override void Draw (RectangleF rect)
 		{
 			base.Draw (rect);
 
