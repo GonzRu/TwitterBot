@@ -35,6 +35,8 @@ namespace TwitterBot
 				_source.TweetDownloadStarted += TweetsDonwloadStarted;
 				_source.TweetDownloadEnded += TweetsDownloadEnded;
 				_source.TableCellSelected += TableCellSelected;
+				_source.NetworkConnectionError += NetworkConnectionError;
+				_source.JsonParseError += JsonParseError;
 				_source.LoadData ();
 				TableView.Source = _source;
 			}
@@ -50,6 +52,16 @@ namespace TwitterBot
 		{
 			_loadingAlertView.DismissWithClickedButtonIndex (1, true);
 			TableView.ReloadData ();
+		}
+
+		private void NetworkConnectionError ()
+		{
+			new UIAlertView ("Ошибка", "Нет подключения к интернету", null, "ok", null).Show ();
+		}
+
+		private void JsonParseError ()
+		{
+			new UIAlertView ("Ошибка", "Ошибка входящих данных", null, "ok", null).Show ();
 		}
 
 		private void TableCellSelected (Tweet t)
