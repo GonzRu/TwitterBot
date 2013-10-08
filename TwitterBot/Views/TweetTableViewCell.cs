@@ -76,8 +76,10 @@ namespace TwitterBot
 				_userTweetPostTimeLabel.Text = d.Days.ToString () + " д";
 			else if (d.Hours != 0)
 				_userTweetPostTimeLabel.Text = d.Hours.ToString () + " ч";
-			else
+			else if (d.Minutes != 0)
 				_userTweetPostTimeLabel.Text = d.Minutes.ToString () + " м";
+			else
+				_userTweetPostTimeLabel.Text = d.Seconds.ToString () + " с";
 			_userAvatarView.Image = ImageLoader.DefaultRequestImage (tweet.UserAvatarUrl, this);
 
 			if (_userAvatarView.Image == null)
