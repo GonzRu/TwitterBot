@@ -1,10 +1,11 @@
 using System;
 using MonoTouch.UIKit;
 using MonoTouch.Dialog.Utilities;
+using System.Drawing;
 
 namespace TwitterBot
 {
-	public class TweetInfoController : UIViewController
+	public class TweetInfoController : UIViewController, IImageUpdated
 	{
 		private UIImageView _userAvatar;
 		private UILabel _userName;
@@ -14,6 +15,7 @@ namespace TwitterBot
 		private UILabel _userTweetPostTime;
 		private UILabel _userTweetShortUrl;
 
+		private string _url;
 
 		public TweetInfoController ()
 		{
@@ -32,7 +34,7 @@ namespace TwitterBot
 			float avatarHeight = 64f;
 			float textHeight = 100f;
 
-			View.BackgroundColor = UIColor.FromPatternImage (UIImage.FromFile("Content/Tweets/bg.png"));
+			View.BackgroundColor = UIColor.White;
 
 			_userAvatar.Frame = new System.Drawing.RectangleF (leftPadding,
 			                                                   topPadding,
@@ -50,7 +52,6 @@ namespace TwitterBot
 			                                               topPadding + (4 * avatarHeight) / 5,
 			                                               50,
 			                                               avatarHeight / 5);
-
 
 			_userName.Font = UIFont.FromName ("HelveticaNeue-Bold", 16f);
 			_userTweetText.Font = UIFont.FromName ("HelveticaNeue", 12f);
@@ -93,6 +94,7 @@ namespace TwitterBot
 
 		public void ShowNewTweetInfo(Tweet t)
 		{
+			_url = t.UserAvatarUrl.ToString ();
 			_userName.Text = t.UserName;
 			_userTweetText.Text = t.TweetText;
 			_userTweetPostTime.Text = t.PostTweetTime.ToShortDateString ();
@@ -105,20 +107,30 @@ namespace TwitterBot
 			float leftPadding = 18f;
 			float timeAndUrlHeight = 20;
 
-			_separateLineImage.Frame = new System.Drawing.RectangleF (leftPadding,
+			_separateLineImage.Frame = new RectangleF (leftPadding,
 			                                                          _userTweetText.Frame.Bottom + 20f,
 			                                                          _separateLineImage.Image.Size.Width,
 			                                                          _separateLineImage.Image.Size.Height);
-			_userTweetPostTime.Frame = new System.Drawing.RectangleF (leftPadding,
+			_userTweetPostTime.Frame = new RectangleF (leftPadding,
 			                                                          _separateLineImage.Frame.Bottom + 10f,
 			                                                          _separateLineImage.Frame.Width / 3,
 			                                                          timeAndUrlHeight);
-			_userTweetShortUrl.Frame = new System.Drawing.RectangleF (leftPadding + _userTweetPostTime.Frame.Width + leftPadding,
+			_userTweetShortUrl.Frame = new RectangleF (leftPadding + _userTweetPostTime.Frame.Width + leftPadding,
 			                                                          _separateLineImage.Frame.Bottom + 10f,
 			                                                          _separateLineImage.Frame.Width,
 			                                                          timeAndUrlHeight);
 
-			_userAvatar.Image = ImageLoader.DefaultRequestImage (t.UserAvatarUrl, null);
+			var img = ImageLoader.DefaultRequestImage (t.UserAvatarUrl, this);
+			if (img != null)
+				_userAvatar.Image = img;
+			else
+				_userAvatar.Image = UIImage.FromBundle ("Content/Main/avatar.png");
+		}
+
+		public void UpdatedImage (Uri uri)
+		{
+			if (_url == uri.ToString ())
+				_userAvatar.Image = ImageLoader.DefaultRequestImage (uri, null);
 		}
 	}
 }
