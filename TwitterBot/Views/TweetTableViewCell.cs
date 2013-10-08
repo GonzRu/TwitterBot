@@ -80,15 +80,19 @@ namespace TwitterBot
 				_userTweetPostTimeLabel.Text = d.Minutes.ToString () + " м";
 			else
 				_userTweetPostTimeLabel.Text = d.Seconds.ToString () + " с";
-			_userAvatarView.Image = ImageLoader.DefaultRequestImage (tweet.UserAvatarUrl, this);
 
-			if (_userAvatarView.Image == null)
-				_userAvatarView.Image = UIImage.FromFile ("Content/Main/avatar.png");
+			var img = ImageLoader.DefaultRequestImage (tweet.UserAvatarUrl, this);
+
+			if (img == null)
+				img = UIImage.FromBundle ("Content/Main/avatar.png");
+			else
+				img = img.SetMask ("Content/Main/mask_avatar_mini.png");
+			_userAvatarView.Image = img;
 		}
 
 		public void UpdatedImage (Uri uri)
 		{
-			_userAvatarView.Image = ImageLoader.DefaultRequestImage (uri, null);
+			_userAvatarView.Image = ImageLoader.DefaultRequestImage (uri, null).SetMask ("Content/Main/mask_avatar_mini.png");
 		}
 	}
 }
