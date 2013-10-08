@@ -16,7 +16,7 @@ namespace TwitterBot
 		private Twitter5Service _twitter;
 		private Account _acc;
 
-		private string _maxId = "";
+		private string _maxId = null;
 
 		public TweetsDownloader (string hastag)
 		{
@@ -56,44 +56,33 @@ namespace TwitterBot
 			string hastTag = _hashtag.Substring (1);
 
 			if (String.IsNullOrEmpty (_maxId))
-				return "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=" + hastTag + "&count=" + countOfTweets.ToString ();
+				return "https://api.twitter.com/1.1/search/tweets.json?q=@" + hastTag + "&count=" + countOfTweets.ToString ();
 			else
-				return "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=" + hastTag + "&count=" + countOfTweets.ToString () + "&max_id=" + _maxId;
+				return "https://api.twitter.com/1.1/search/tweets.json" + _maxId + "&count=" + countOfTweets.ToString ();
 		}
 
 		private List<Tweet> ParseJsonToTweetsList(string jsonStr)
 		{
 			List<Tweet> list = new List<Tweet> ();
 
-			Console.WriteLine (jsonStr);
-
 			try
 			{
-				JArray o = JArray.Parse (jsonStr);
+				JObject ob = JObject.Parse (jsonStr);
+
+				JArray o = (JArray)ob["statuses"];
 
 				foreach (var token in o) {
-					var retweetedToken = token.SelectToken ("retweeted_status");
 					Tweet t = new Tweet ();
 
-					if (retweetedToken == null) {
-						t.UserName = (string)token.SelectToken ("user").SelectToken ("name");
-						t.TweetText = (string)token.SelectToken ("text");
-						t.PostTweetTime = DateTime.ParseExact ((string)token.SelectToken ("created_at"), "ddd MMM dd HH:mm:ss zzz yyyy", System.Globalization.CultureInfo.InvariantCulture);
-						t.UserAvatarUrl = new Uri ((string)token.SelectToken ("user").SelectToken ("profile_image_url"));
-					} else {
-						t.UserName = (string)retweetedToken.SelectToken ("user").SelectToken ("name");
-						t.TweetText = (string)retweetedToken.SelectToken ("text");
-						t.PostTweetTime = DateTime.ParseExact ((string)retweetedToken.SelectToken ("created_at"), "ddd MMM dd HH:mm:ss zzz yyyy", System.Globalization.CultureInfo.InvariantCulture);
-						t.UserAvatarUrl = new Uri ((string)retweetedToken.SelectToken ("user").SelectToken ("profile_image_url"));
-					}
+					t.UserName = (string)token.SelectToken ("user").SelectToken ("name");
+					t.TweetText = (string)token.SelectToken ("text");
+					t.PostTweetTime = DateTime.ParseExact ((string)token.SelectToken ("created_at"), "ddd MMM dd HH:mm:ss zzz yyyy", System.Globalization.CultureInfo.InvariantCulture);
+					t.UserAvatarUrl = new Uri ((string)token.SelectToken ("user").SelectToken ("profile_image_url"));
 
 					list.Add (t);
-
-					_maxId = (string)token.SelectToken ("id_str");
 				}
 
-				if (!String.IsNullOrEmpty(_maxId))
-					_maxId = (Int64.Parse(_maxId) - 1).ToString();
+				_maxId = (string)ob["search_metadata"]["next_results"];
 			}
 			catch {
 				throw new JsonReaderException ("Error parse id_str");
