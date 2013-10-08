@@ -97,6 +97,7 @@
     <Folder Include="Controllers\" />
     <Folder Include="Models\" />
     <Folder Include="Views\" />
+    <Folder Include="Resources\Content\Info\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -151,7 +152,17 @@
     <BundleResource Include="Resources\Default.png" />
     <BundleResource Include="Resources\Default%402x.png" />
     <BundleResource Include="Resources\Default-568h%402x.png" />
-    <BundleResource Include="Resources\Content\logo.png" />
+    <BundleResource Include="Resources\Content\Info\button.png" />
+    <BundleResource Include="Resources\Content\Info\button%402x.png" />
+    <BundleResource Include="Resources\Content\Info\button_1p.png" />
+    <BundleResource Include="Resources\Content\Info\button_pressed.png" />
+    <BundleResource Include="Resources\Content\Info\button_pressed%402x.png" />
+    <BundleResource Include="Resources\Content\Info\icon_mail.png" />
+    <BundleResource Include="Resources\Content\Info\icon_mail%402x.png" />
+    <BundleResource Include="Resources\Content\Info\icon_phone.png" />
+    <BundleResource Include="Resources\Content\Info\icon_phone%402x.png" />
+    <BundleResource Include="Resources\Content\Info\logo.png" />
+    <BundleResource Include="Resources\Content\Info\logo%402x.png" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="Resources\Content\Icons\iTunesArtwork.png" />
