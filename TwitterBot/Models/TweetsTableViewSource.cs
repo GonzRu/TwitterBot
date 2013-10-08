@@ -7,7 +7,7 @@ public class TweetsTableViewSource : UITableViewSource
 {
 	private const string TWEET_ID = "Tweet";
 	private const string MORE_TWEETS_ID = "More Tweets";
-	private const int COUNT_OF_TWEETS_TO_DOWNLOAD = 7;
+	private const int COUNT_OF_TWEETS_TO_DOWNLOAD = 15;
 
 	private TweetsDownloader _tweetsDownloader;		
 	public List<Tweet> TweetsList { get; set; }

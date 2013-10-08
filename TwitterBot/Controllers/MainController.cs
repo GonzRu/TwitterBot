@@ -9,14 +9,14 @@ namespace TwitterBot
 
 		public MainController ()
 		{
-			_rootTabBar = new TwitterTabBarController ();
 		}
 
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
 
-			this.PushViewController (_rootTabBar, true);
+			_rootTabBar = new TwitterTabBarController ();
+			this.PushViewController (_rootTabBar, false);
 		}
 	}
 }

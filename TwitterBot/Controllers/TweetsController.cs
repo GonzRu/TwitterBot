@@ -30,6 +30,13 @@ namespace TwitterBot
 
 			TabBarController.Title = _hashTag;
 
+			var f = TableView.Superview.Frame;
+			if (f.Y != 0) {
+				f.Height += f.Y;
+				f.Y = 0;
+				TableView.Superview.Frame = f;
+			}
+
 			if (TableView.Source == null) {
 				var _source = new TweetsTableViewSource (_hashTag, this);
 				_source.TweetDownloadStarted += TweetsDonwloadStarted;
