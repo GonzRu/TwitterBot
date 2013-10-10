@@ -10,6 +10,7 @@ namespace TwitterBot
 
 		private LoadingAlertView _loadingAlertView;
 		private TweetInfoController _tweetInfoController;
+		private UIRefreshControl _refreshControl;
 
 		public TweetsController (string hashTag)
 		{
@@ -17,11 +18,15 @@ namespace TwitterBot
 
 			_loadingAlertView = new LoadingAlertView (View.Frame);
 			_tweetInfoController = new TweetInfoController ();
+
 		}
 
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
+			_refreshControl = new UIRefreshControl ();
+			_refreshControl.ValueChanged += UpdateStarted;
+			RefreshControl = _refreshControl;
 		}
 
 		public override void ViewDidAppear (bool animated)
@@ -49,15 +54,21 @@ namespace TwitterBot
 			}
 		}
 
-		private void TweetsDonwloadStarted ()
+		private void TweetsDonwloadStarted (bool isRefresh)
 		{
-			View.AddSubview (_loadingAlertView);
-			_loadingAlertView.Show ();
+			if (!isRefresh) {
+				View.AddSubview (_loadingAlertView);
+				_loadingAlertView.Show ();
+			}
 		}
 
-		private void TweetsDownloadEnded ()
+		private void TweetsDownloadEnded (bool isRefresh)
 		{
-			_loadingAlertView.DismissWithClickedButtonIndex (1, true);
+			if (!isRefresh) {
+				_loadingAlertView.DismissWithClickedButtonIndex (1, true);
+			} else
+				_refreshControl.EndRefreshing ();
+
 			TableView.ReloadData ();
 		}
 
@@ -80,6 +91,13 @@ namespace TwitterBot
 				this.TabBarController.NavigationController.PushViewController (_tweetInfoController, true);
 			} else
 				source.LoadData ();
+		}
+
+		private void UpdateStarted (object sender, EventArgs e)
+		{
+			var source = TableView.Source as TweetsTableViewSource;
+
+			source.RefreshData ();
 		}
 	}
 }
