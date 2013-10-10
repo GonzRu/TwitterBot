@@ -12,8 +12,8 @@ public class TweetsTableViewSource : UITableViewSource
 	private TweetsDownloader _tweetsDownloader;		
 	public List<Tweet> TweetsList { get; set; }
 	
-	public event Action TweetDownloadStarted;
-	public event Action TweetDownloadEnded;	
+	public event Action<bool> TweetDownloadStarted;
+	public event Action<bool> TweetDownloadEnded;	
 	public event Action NetworkConnectionError;
 	public event Action JsonParseError;
 	public event Action<int> TableCellSelected;
@@ -67,7 +67,7 @@ public class TweetsTableViewSource : UITableViewSource
 
 	public async void LoadData ()
 	{
-		OnTweetDownloadStarted ();
+		OnTweetDownloadStarted (false);
 
 		try
 		{
@@ -88,19 +88,39 @@ public class TweetsTableViewSource : UITableViewSource
 				TweetsList = new List<Tweet> ();
 		}
 
-		OnTweetDownloadEnded ();
+		OnTweetDownloadEnded (false);
 	}
 
-	protected virtual void OnTweetDownloadStarted ()
+	public async void RefreshData ()
+	{
+		OnTweetDownloadStarted (true);
+
+		try
+		{
+			var l = await _tweetsDownloader.GetNewTweetsAsync ();
+			l.AddRange (TweetsList);
+			TweetsList = l;
+		}
+		catch (Newtonsoft.Json.JsonReaderException) {
+			OnJsonParseError ();
+		}
+		catch (Exception) {
+			OnNetworkConnectionError ();
+		}
+
+		OnTweetDownloadEnded (true);
+	}
+
+	protected virtual void OnTweetDownloadStarted (bool isRefresh)
 	{
 		if (TweetDownloadStarted != null)
-			TweetDownloadStarted ();
+			TweetDownloadStarted (isRefresh);
 	}
 
-	protected virtual void OnTweetDownloadEnded ()
+	protected virtual void OnTweetDownloadEnded (bool isRefresh)
 	{
 		if (TweetDownloadEnded != null)
-			TweetDownloadEnded ();
+			TweetDownloadEnded (isRefresh);
 	}
 
 	protected virtual void OnNetworkConnectionError ()
