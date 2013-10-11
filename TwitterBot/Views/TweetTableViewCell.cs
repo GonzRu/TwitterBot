@@ -11,6 +11,8 @@ namespace TwitterBot
 		private UILabel _userTweetPostTimeLabel;
 		private UIImageView _userAvatarView;
 
+		private Uri _userAvatarUri;
+
 		public TweetTableViewCell (string reuseIdentifier)
 			: base(UITableViewCellStyle.Subtitle, reuseIdentifier)
 		{
@@ -68,6 +70,8 @@ namespace TwitterBot
 
 		public void UpdateCell (Tweet tweet)
 		{
+			_userAvatarUri = tweet.UserAvatarUrl;
+
 			_userNameLabel.Text = tweet.UserName;
 			_userTweetTextLabel.Text = tweet.TweetText;
 
@@ -92,7 +96,8 @@ namespace TwitterBot
 
 		public void UpdatedImage (Uri uri)
 		{
-			_userAvatarView.Image = ImageLoader.DefaultRequestImage (uri, null).SetMask ("Content/Main/mask_avatar_mini.png");
+			if (_userAvatarUri == uri)
+				_userAvatarView.Image = ImageLoader.DefaultRequestImage (uri, null).SetMask ("Content/Main/mask_avatar_mini.png");
 		}
 	}
 }
