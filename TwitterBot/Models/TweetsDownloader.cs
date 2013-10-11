@@ -24,11 +24,14 @@ namespace TwitterBot
 			_hashtag = hastag.Substring (1);
 
 			_twitter = new Twitter5Service ();
-
 			var accTask = _twitter.GetAccountsAsync ();
 			accTask.Wait ();
 			var accounts = accTask.Result;
-			_acc = accounts.First ();
+
+			_acc = accounts.FirstOrDefault ();
+
+			if (_acc == null)
+				throw new Exception ("Twitter account don't set");
 		}
 
 		public List<Tweet> GetNextNTweets (int countOfTweets)

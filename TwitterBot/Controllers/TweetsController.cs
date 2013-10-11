@@ -43,14 +43,20 @@ namespace TwitterBot
 			}
 
 			if (TableView.Source == null) {
-				var _source = new TweetsTableViewSource (_hashTag, this);
-				_source.TweetDownloadStarted += TweetsDonwloadStarted;
-				_source.TweetDownloadEnded += TweetsDownloadEnded;
-				_source.TableCellSelected += TableCellSelected;
-				_source.NetworkConnectionError += NetworkConnectionError;
-				_source.JsonParseError += JsonParseError;
-				_source.LoadData ();
-				TableView.Source = _source;
+				try
+				{
+					var _source = new TweetsTableViewSource (_hashTag, this);
+					_source.TweetDownloadStarted += TweetsDonwloadStarted;
+					_source.TweetDownloadEnded += TweetsDownloadEnded;
+					_source.TableCellSelected += TableCellSelected;
+					_source.NetworkConnectionError += NetworkConnectionError;
+					_source.JsonParseError += JsonParseError;
+					_source.LoadData ();
+					TableView.Source = _source;
+				}
+				catch {
+					new UIAlertView ("Ошибка", "Не задан аккаунт твиттера", null, "Ок", null).Show ();
+				}
 			}
 		}
 
