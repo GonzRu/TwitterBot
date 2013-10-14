@@ -27,6 +27,8 @@ namespace TwitterBot
 		{
 			base.Draw (rect);
 
+			BackgroundColor = UIColor.Clear;
+
 			using (var context = UIGraphics.GetCurrentContext ())
 			{
 				var r = new RectangleF (_leftPadding,
