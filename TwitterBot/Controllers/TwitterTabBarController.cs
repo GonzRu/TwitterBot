@@ -30,6 +30,9 @@ namespace TwitterBot
 		{
 			base.ViewDidLoad ();
 
+			if (UIDevice.CurrentDevice.CheckSystemVersion (7, 0))
+				EdgesForExtendedLayout = UIRectEdge.None;
+
 			NavigationItem.RightBarButtonItem = new UIBarButtonItem (
 				"Инфо", 
 				UIBarButtonItemStyle.Done,

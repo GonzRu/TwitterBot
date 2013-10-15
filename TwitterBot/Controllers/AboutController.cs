@@ -33,20 +33,32 @@ namespace TwitterBot
 		{
 			base.ViewDidLoad ();
 
+			float topPadding = 5f;
+
+			if (UIDevice.CurrentDevice.CheckSystemVersion (7, 0))
+				EdgesForExtendedLayout = UIRectEdge.None;
+
 			View.BackgroundColor = UIColor.White;
 
-			var f = View.Frame;
-			f.Y -= 20;
+			if (!UIDevice.CurrentDevice.CheckSystemVersion (7, 0)) {
+				var f = View.Frame;
+				f.Y -= 20;
+				View.Frame = f;
+			}
 
 			// Scroll View
 			_scrollView.BackgroundColor = UIColor.White;
-			_scrollView.Frame = f;
+			_scrollView.Frame = View.Frame;
 			_scrollView.AutoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth;
 			_scrollView.ScrollEnabled = true;
 			View.AddSubview (_scrollView);
 
 			// Company logo
 			_logo.AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin;
+			_logo.Frame = new System.Drawing.RectangleF (View.Center.X - _logo.Image.Size.Width / 2,
+			                                             topPadding,
+			                                             _logo.Image.Size.Width,
+			                                             _logo.Image.Size.Height);
 			_scrollView.AddSubview (_logo);
 
 			// About company text
@@ -61,7 +73,6 @@ namespace TwitterBot
 			_btnCall.SetBackgroundImage (UIImage.FromFile ("Content/Info/button_pressed.png").StretchableImage (11, 0), UIControlState.Highlighted);
 			_btnCall.SetImage (UIImage.FromFile ("Content/Info/icon_phone.png"), UIControlState.Normal & UIControlState.Highlighted);
 			_btnCall.ImageEdgeInsets = new UIEdgeInsets (0, 0, 10, 0);
-			_btnCall.AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin;
 			_btnCall.TouchUpInside += CallTelephoneNumberButtonPushed;
 			_scrollView.AddSubview (_btnCall);
 
@@ -70,14 +81,13 @@ namespace TwitterBot
 			_btnEmail.SetBackgroundImage (UIImage.FromFile ("Content/Info/button_pressed.png").StretchableImage (11, 0), UIControlState.Highlighted);
 			_btnEmail.SetImage (UIImage.FromFile ("Content/Info/icon_mail.png"), UIControlState.Normal & UIControlState.Highlighted);
 			_btnEmail.ImageEdgeInsets = new UIEdgeInsets (0, 0, 10, 0);
-			_btnEmail.AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin | UIViewAutoresizing.FlexibleRightMargin;
 			_btnEmail.TouchUpInside += SendEmailButtonPushed;
 			_scrollView.AddSubview (_btnEmail);
 		}
 
-		public override void WillAnimateSecondHalfOfRotation (UIInterfaceOrientation fromInterfaceOrientation, double duration)
+		public override void WillAnimateRotation (UIInterfaceOrientation toInterfaceOrientation, double duration)
 		{
-			base.WillAnimateSecondHalfOfRotation (fromInterfaceOrientation, duration);
+			base.WillAnimateRotation (toInterfaceOrientation, duration);
 
 			SetFrames ();
 		}
@@ -95,24 +105,19 @@ namespace TwitterBot
 			float rightPadding = 10f;
 			float topPadding = 5f;
 
-			_logo.Frame = new System.Drawing.RectangleF (View.Center.X - _logo.Image.Size.Width / 2,
-			                                             topPadding,
-			                                             _logo.Image.Size.Width,
-			                                             _logo.Image.Size.Height);
-
-
 			_aboutTextView.Frame = new System.Drawing.RectangleF (leftPadding,
-			                                                      _logo.Frame.Bottom + topPadding,
+			                                                      _logo.Frame.Bottom + 2 * topPadding,
 			                                                      View.Bounds.Width - leftPadding - rightPadding,
 			                                                      _aboutTextView.ContentSize.Height);
+			_aboutTextView.SizeToFit ();
 
 			_btnCall.Frame = new System.Drawing.RectangleF (View.Center.X - 3 * BUTTON_WIDTH / 2,
-			                                                _logo.Frame.Bottom + topPadding + _aboutTextView.ContentSize.Height + topPadding,
+			                                                _aboutTextView.Frame.Bottom + topPadding,
 			                                                BUTTON_WIDTH,
 			                                                BUTTON_HEIGHT);
 
 			_btnEmail.Frame = new System.Drawing.RectangleF (View.Center.X + BUTTON_WIDTH / 2,
-			                                                 _logo.Frame.Bottom + topPadding + _aboutTextView.ContentSize.Height + topPadding,
+			                                                 _aboutTextView.Frame.Bottom + topPadding,
 			                                                 BUTTON_WIDTH,
 			                                                 BUTTON_HEIGHT);
 

@@ -24,6 +24,10 @@ namespace TwitterBot
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
+
+			if (UIDevice.CurrentDevice.CheckSystemVersion (7, 0))
+				EdgesForExtendedLayout = UIRectEdge.None;
+
 			_refreshControl = new UIRefreshControl ();
 			_refreshControl.ValueChanged += UpdateStarted;
 			RefreshControl = _refreshControl;
@@ -35,11 +39,13 @@ namespace TwitterBot
 
 			TabBarController.Title = _hashTag;
 
-			var f = TableView.Superview.Frame;
-			if (f.Y != 0) {
-				f.Height += f.Y;
-				f.Y = 0;
-				TableView.Superview.Frame = f;
+			if (!UIDevice.CurrentDevice.CheckSystemVersion (7, 0)) {
+				var f = TableView.Superview.Frame;
+				if (f.Y != 0) {
+					f.Height += f.Y;
+					f.Y = 0;
+					TableView.Superview.Frame = f;
+				}
 			}
 
 			if (TableView.Source == null) {
@@ -71,7 +77,8 @@ namespace TwitterBot
 		private void TweetsDownloadEnded (bool isRefresh)
 		{
 			if (!isRefresh) {
-				_loadingAlertView.DismissWithClickedButtonIndex (1, true);
+				_loadingAlertView.DismissWithClickedButtonIndex (0, true);
+				_loadingAlertView.RemoveFromSuperview ();
 			} else
 				_refreshControl.EndRefreshing ();
 

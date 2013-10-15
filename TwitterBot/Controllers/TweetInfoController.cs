@@ -32,7 +32,6 @@ namespace TwitterBot
 			float topPadding = 25f;
 			float avatarWidth = 64f;
 			float avatarHeight = 64f;
-			float textHeight = 100f;
 
 			View.BackgroundColor = UIColor.White;
 
@@ -40,14 +39,12 @@ namespace TwitterBot
 			                                                   topPadding,
 			                                                   avatarWidth,
 			                                                   avatarHeight);
+
 			_userName.Frame = new System.Drawing.RectangleF (2 * leftPadding + avatarWidth,
 			                                                 topPadding + avatarHeight / 3,
 			                                                 View.Frame.Width - rightPadding - 2 * leftPadding - avatarWidth,
 			                                                 avatarHeight / 3);
-			_userTweetText.Frame = new System.Drawing.RectangleF (leftPadding,
-			                                                      2 * topPadding + avatarHeight,
-			                                                      View.Frame.Width - leftPadding - rightPadding,
-			                                                      textHeight);
+
 			_viaWeb.Frame = new System.Drawing.RectangleF (2 * leftPadding + avatarWidth,
 			                                               topPadding + (4 * avatarHeight) / 5,
 			                                               50,
@@ -77,11 +74,15 @@ namespace TwitterBot
 
 			_userTweetText.Editable = false;
 			_userTweetText.ScrollEnabled = false;
+			_userTweetText.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
 		}
 
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
+
+			if (UIDevice.CurrentDevice.CheckSystemVersion (7, 0))
+				EdgesForExtendedLayout = UIRectEdge.None;
 
 			View.AddSubview (_userAvatar);
 			View.AddSubview (_userName);
@@ -100,25 +101,7 @@ namespace TwitterBot
 			_userTweetPostTime.Text = t.PostTweetTime.ToShortDateString ();
 			_userTweetShortUrl.Text = "http://bit.ly/X2IfBq";
 
-			var frame = _userTweetText.Frame;
-			frame.Height = _userTweetText.ContentSize.Height;
-			_userTweetText.Frame = frame;
-
-			float leftPadding = 18f;
-			float timeAndUrlHeight = 20;
-
-			_separateLineImage.Frame = new RectangleF (leftPadding,
-			                                                          _userTweetText.Frame.Bottom + 20f,
-			                                                          _separateLineImage.Image.Size.Width,
-			                                                          _separateLineImage.Image.Size.Height);
-			_userTweetPostTime.Frame = new RectangleF (leftPadding,
-			                                                          _separateLineImage.Frame.Bottom + 10f,
-			                                                          _separateLineImage.Frame.Width / 3,
-			                                                          timeAndUrlHeight);
-			_userTweetShortUrl.Frame = new RectangleF (leftPadding + _userTweetPostTime.Frame.Width + leftPadding,
-			                                                          _separateLineImage.Frame.Bottom + 10f,
-			                                                          _separateLineImage.Frame.Width,
-			                                                          timeAndUrlHeight);
+			SetFrames ();
 
 			var img = ImageLoader.DefaultRequestImage (t.UserAvatarUrl, this);
 			if (img != null)
@@ -127,10 +110,48 @@ namespace TwitterBot
 				_userAvatar.Image = UIImage.FromBundle ("Content/Main/avatar.png");
 		}
 
+		public override void WillAnimateRotation (UIInterfaceOrientation toInterfaceOrientation, double duration)
+		{
+			base.WillAnimateRotation (toInterfaceOrientation, duration);
+
+			SetFrames ();
+		}
+
 		public void UpdatedImage (Uri uri)
 		{
 			if (_url == uri.ToString ())
 				_userAvatar.Image = ImageLoader.DefaultRequestImage (uri, null);
+		}
+
+		private void SetFrames ()
+		{
+			float leftPadding = 18f;
+			float rightPadding = 18f;
+			float topPadding = 10f;
+			float timeAndUrlHeight = 20;
+
+			_userTweetText.Frame = new System.Drawing.RectangleF (leftPadding,
+			                                                      _userAvatar.Frame.Bottom + topPadding,
+			                                                      View.Frame.Width - leftPadding - rightPadding,
+			                                                      _userTweetText.ContentSize.Height);
+			_userTweetText.SizeToFit ();
+
+
+
+			_separateLineImage.Frame = new RectangleF (leftPadding,
+			                                           _userTweetText.Frame.Bottom + topPadding,
+			                                           _separateLineImage.Image.Size.Width,
+			                                           _separateLineImage.Image.Size.Height);
+
+			_userTweetPostTime.Frame = new RectangleF (leftPadding,
+			                                           _separateLineImage.Frame.Bottom + topPadding,
+			                                           _separateLineImage.Frame.Width / 3,
+			                                           timeAndUrlHeight);
+
+			_userTweetShortUrl.Frame = new RectangleF (leftPadding + _userTweetPostTime.Frame.Width + leftPadding,
+			                                           _separateLineImage.Frame.Bottom + topPadding,
+			                                           _separateLineImage.Frame.Width,
+			                                           timeAndUrlHeight);
 		}
 	}
 }
